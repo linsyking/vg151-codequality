@@ -7,4 +7,3 @@ add_subdirectory(codequality)
 target_include_directories(codequality PRIVATE /usr/lib/llvm-14/include)
 
 install(TARGETS codequality LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
-install(TARGETS codequality_arch LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
