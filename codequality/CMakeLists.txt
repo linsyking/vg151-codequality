@@ -1,5 +1,10 @@
-include_directories(../include)
 add_library(codequality
+    SHARED
+    CodeQualityTidyModule.cpp
+    NoGlobalVariablesCheck.cpp
+    UncheckedMallocResultCheck.cpp
+    )
+add_library(codequality_deb
     SHARED
     CodeQualityTidyModule.cpp
     NoGlobalVariablesCheck.cpp
