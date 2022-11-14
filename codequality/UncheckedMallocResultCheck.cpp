@@ -52,23 +52,19 @@ bool UncheckedMallocResultCheck::hasUsedVar(const Stmt *statement, const VarDecl
     if (statement->children().empty()) {
         return false;
     }
-    bool has_success = false;
     for (auto const *child : statement->children()) {
         if (child->getStmtClass() == Stmt::DeclRefExprClass) {
             const DeclRefExpr *var_decl = (DeclRefExpr *)child;
             if (var_decl->getDecl() == var) {
-                has_success = true;
-                continue;
-            } else {
-                throw 0;
+                return true;
             }
         } else {
             if (hasUsedVar(child, var)) {
-                has_success = true;
+                return true;
             }
         }
     }
-    return has_success;
+    return false;
 }
 
 void UncheckedMallocResultCheck::check(const MatchFinder::MatchResult &Result) {
@@ -131,13 +127,10 @@ void UncheckedMallocResultCheck::check(const MatchFinder::MatchResult &Result) {
             if (Child->getStmtClass() != Stmt::IfStmtClass) {
                 // Wrong!
                 diag(call_expr->getBeginLoc(),
-                     "variable %0 is dynamically allocated here, but you don't check if its value "
-                     "is NULL")
-                    << my_var;
-                diag(Child->getBeginLoc(), "add 'if' to check whether it's NULL",
-                     DiagnosticIDs::Note);
+                     "the value of dynamically allocated memory was not checked")
+                    << my_var << call_expr->getCallee()->getSourceRange();
             } else {
-                bool check_res = 0;
+                bool        check_res = 0;
                 const auto *cond_stmt = *Child->child_begin();
                 try {
                     check_res = hasUsedVar(cond_stmt, my_var);
@@ -147,13 +140,11 @@ void UncheckedMallocResultCheck::check(const MatchFinder::MatchResult &Result) {
                 if (!check_res) {
                     // Not checking properly
                     diag(call_expr->getBeginLoc(),
-                         "variable %0 is dynamically allocated here, but you don't check if its "
-                         "value "
-                         "is NULL")
-                        << my_var;
-                    diag(cond_stmt->getBeginLoc(), "this 'if' statement is not checking %0 properly",
+                         "The value of dynamically allocated memory was not checked")
+                        << my_var << call_expr->getCallee()->getSourceRange();
+                    diag(cond_stmt->getBeginLoc(), "this statement doesn't check it",
                          DiagnosticIDs::Note)
-                        << my_var;
+                        << cond_stmt->getSourceRange();
                 }
             }
             ShouldCheck = false;
@@ -165,9 +156,8 @@ void UncheckedMallocResultCheck::check(const MatchFinder::MatchResult &Result) {
     }
     if (ShouldCheck) {
         diag(call_expr->getBeginLoc(),
-             "variable %0 is dynamically allocated here, but you don't check if its value is NULL")
-            << my_var;
-        diag(BackupChild->getEndLoc(), "add 'if' to check whether it's NULL", DiagnosticIDs::Note);
+             "The value of dynamically allocated memory was not checked")
+            << my_var << call_expr->getCallee()->getSourceRange();
     }
 }
 

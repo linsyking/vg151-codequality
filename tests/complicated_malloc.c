@@ -14,10 +14,6 @@ void bad_malloc() {
     // test comment
     if(1){   // Test if
         char *temp = malloc(sizeof(char)*100);
-        if(temp && ll){
-            // test condition which includes other unrelated variables
-            return;
-        }
         // no check here
         for(int i = 0; i < 10; ++i){
             // nested here
@@ -41,6 +37,7 @@ void bad_malloc() {
 
 void good_malloc() {
     test d1;
+    test list[10];
     test *d2 = malloc(sizeof(test));
     if(d2){}    // in one line
 
@@ -66,6 +63,11 @@ void good_malloc() {
             d2->data = malloc(10); // test modify
             if(d2->data == NULL){
                 // use NULL
+                return;
+            }
+
+            list[i].data = malloc(i*100);   // Array
+            if (d2->data && list[i].data || NULL) {
                 return;
             }
         }
