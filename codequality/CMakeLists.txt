@@ -4,9 +4,3 @@ add_library(codequality
     NoGlobalVariablesCheck.cpp
     UncheckedMallocResultCheck.cpp
     )
-add_library(codequality_arch
-    SHARED
-    CodeQualityTidyModule.cpp
-    NoGlobalVariablesCheck.cpp
-    UncheckedMallocResultCheck.cpp
-    )
