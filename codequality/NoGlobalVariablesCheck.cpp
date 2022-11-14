@@ -28,8 +28,9 @@ void NoGlobalVariablesCheck::registerMatchers(MatchFinder *Finder) {
 void NoGlobalVariablesCheck::check(const MatchFinder::MatchResult &Result) {
     const auto *MatchedDecl = Result.Nodes.getNodeAs<VarDecl>("global-variables");
     if (MatchedDecl) {
-        diag(MatchedDecl->getLocation(), "global variable %0 is not allowed here") << MatchedDecl <<MatchedDecl->getSourceRange();
-        diag("consider adding 'const' to make it unchangeable", DiagnosticIDs::Note);
+        diag(MatchedDecl->getLocation(),
+             "non-constant global variable %0 is not allowed here, try making it const")
+            << MatchedDecl << MatchedDecl->getSourceRange();
     }
 }
 
