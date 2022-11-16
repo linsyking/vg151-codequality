@@ -6,8 +6,6 @@ A clang-tidy plugin that performs code quality checks for vg151.
 
 ## Build
 
-The `include` folder includes `clang` headers. However, some of them may be already installed on your system.
-
 To build a Release version, run
 
 ```sh
