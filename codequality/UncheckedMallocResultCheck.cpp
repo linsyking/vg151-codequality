@@ -20,7 +20,7 @@ namespace clang {
 namespace tidy {
 namespace codequality {
 
-const std::vector<StringRef> AllocNames = {"malloc", "calloc"};
+const std::vector<StringRef> AllocNames = {"malloc", "calloc", "realloc"};
 
 void UncheckedMallocResultCheck::registerMatchers(MatchFinder *Finder) {
     // Still need to improve for different checks
