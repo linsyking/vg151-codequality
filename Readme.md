@@ -18,13 +18,6 @@ Change the compiler path by yourself (like adding `-DCMAKE_C_COMPILER:FILEPATH=/
 
 ## All checks:
 
-- `no-global-variables`
-- `unchecked-malloc-result`
-- `no-fflush-stdin`
-- `no-public-member-variable`
-
-## C (Project 2)
-
 ### `no-global-variables`
 
 Check whether you used (non-const) global variables (including static) in C.
@@ -40,8 +33,6 @@ Check whether you checked the return value of `malloc`/`calloc` after you used t
 ### `no-fflush-stdin`
 
 Stop you from using `fflush(stdin)`.
-
-## C++ (Project 3)
 
 ### `no-public-member-variable`
 
