@@ -6,6 +6,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include "NoFflushStdinCheck.h"
 #include "NoGlobalVariablesCheck.h"
 #include "UncheckedMallocResultCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
@@ -19,6 +20,7 @@ namespace codequality {
 class CodeQualityModule : public ClangTidyModule {
 public:
     void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override {
+        CheckFactories.registerCheck<NoFflushStdinCheck>("codequality-no-fflush-stdin");
         CheckFactories.registerCheck<NoGlobalVariablesCheck>("codequality-no-global-variables");
         CheckFactories.registerCheck<UncheckedMallocResultCheck>(
             "codequality-unchecked-malloc-result");
@@ -26,14 +28,10 @@ public:
 };
 
 // Register the CodeQualityModule using this statically initialized variable.
-static ClangTidyModuleRegistry::Add<CodeQualityModule> X("codequality-module",
+static const ClangTidyModuleRegistry::Add<CodeQualityModule> X("codequality-module",
                                                          "Adds VG151-specific checks.");
 
 }  // namespace codequality
-
-// This anchor is used to force the linker to link in the generated object file
-// and thus register the CodeQualityModule.
-// volatile int CodeQualityModuleAnchorSource = 0;
 
 }  // namespace tidy
 }  // namespace clang

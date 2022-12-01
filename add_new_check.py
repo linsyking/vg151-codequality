@@ -75,7 +75,7 @@ def write_header(module_path, module, namespace, check_name, check_name_camel):
 #ifndef %(header_guard)s
 #define %(header_guard)s
 
-#include "ClangTidyCheck.h"
+#include "clang-tidy/ClangTidyCheck.h"
 
 namespace clang {
 namespace tidy {
@@ -258,10 +258,6 @@ def main():
       nargs='?',
       help='name of new tidy check to add (e.g. foo-do-the-stuff)')
   args = parser.parse_args()
-
-  if args.update_docs:
-    update_checks_list(os.path.dirname(sys.argv[0]))
-    return
 
   if not args.module or not args.check:
     print('Module and check must be specified.')
