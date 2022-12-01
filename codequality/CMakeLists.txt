@@ -3,5 +3,6 @@ add_library(codequality
     CodeQualityTidyModule.cpp
     NoFflushStdinCheck.cpp
     NoGlobalVariablesCheck.cpp
+    NoPublicMemberVariablesCheck.cpp
     UncheckedMallocResultCheck.cpp
     )

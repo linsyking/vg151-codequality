@@ -1,6 +1,8 @@
 #ifndef public_member_variable_h
 #define public_member_variable_h
 
+int j= 1;
+
 class test {
 private:
     int s;          // ok
