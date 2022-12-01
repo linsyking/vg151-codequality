@@ -3,6 +3,11 @@
 
 int j= 1;
 
+struct lp{
+    int k;
+    char l;
+};
+
 class test {
 private:
     int s;          // ok
