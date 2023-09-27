@@ -6,6 +6,12 @@ A clang-tidy plugin that performs code quality checks for vg151.
 
 ## Build
 
+Based on your system environment, you may need to change the include directory in `CMakeLists.txt`:
+
+```cmake
+target_include_directories(codequality PRIVATE /usr/lib/llvm-14/include)
+```
+
 To build a Release version, run
 
 ```sh
@@ -14,7 +20,7 @@ cmake -DCMAKE_BUILD_TYPE:STRING=Release -S . -B build
 cmake --build build --config Release
 ```
 
-Change the compiler path by yourself (like adding `-DCMAKE_C_COMPILER:FILEPATH=/usr/local/bin/clang -DCMAKE_CXX_COMPILER:FILEPATH=/usr/local/bin/clang++ `). If possible, better to use `clang` and `clang++` instead of `gcc` and `g++`.
+You may change the compiler path (like adding `-DCMAKE_C_COMPILER:FILEPATH=/usr/local/bin/clang -DCMAKE_CXX_COMPILER:FILEPATH=/usr/local/bin/clang++ `). If possible, better to use `clang` and `clang++` instead of `gcc` and `g++`.
 
 ## All checks:
 
@@ -38,6 +44,7 @@ Stop you from using `fflush(stdin)`.
 
 Stop you from using public member variables. Protected member variables and public member functions are OK.
 
-## TO-DO
+### `no-header-guard`
 
-- Check header guards (need to use `PPCallBacks`)
+Check if you defined header guard in header files.
+
