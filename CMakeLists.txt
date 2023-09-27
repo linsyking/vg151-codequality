@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(vg151-codequality CXX)
 
-set(CMAKE_CXX_FLAGS "-Os -flto")
+set(CMAKE_CXX_FLAGS "-O3 -flto=auto")
 add_subdirectory(codequality)
 
 # Change the LLVM include directory on your machine
