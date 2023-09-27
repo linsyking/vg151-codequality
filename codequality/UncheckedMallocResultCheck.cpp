@@ -8,7 +8,6 @@
 
 #include "UncheckedMallocResultCheck.h"
 
-#include <iostream>
 #include <vector>
 
 #include "clang/AST/ASTContext.h"

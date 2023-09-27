@@ -8,8 +8,6 @@
 
 #include "NoFflushStdinCheck.h"
 
-#include <iostream>
-
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 
 using namespace clang::ast_matchers;

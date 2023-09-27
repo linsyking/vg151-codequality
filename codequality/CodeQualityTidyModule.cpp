@@ -8,6 +8,7 @@
 
 #include "NoFflushStdinCheck.h"
 #include "NoGlobalVariablesCheck.h"
+#include "NoHeaderGuardCheck.h"
 #include "NoPublicMemberVariablesCheck.h"
 #include "UncheckedMallocResultCheck.h"
 #include "clang-tidy/ClangTidyModule.h"
@@ -23,6 +24,7 @@ public:
     void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override {
         CheckFactories.registerCheck<NoFflushStdinCheck>("codequality-no-fflush-stdin");
         CheckFactories.registerCheck<NoGlobalVariablesCheck>("codequality-no-global-variables");
+        CheckFactories.registerCheck<NoHeaderGuardCheck>("codequality-no-header-guard");
         CheckFactories.registerCheck<NoPublicMemberVariablesCheck>(
             "codequality-no-public-member-variables");
         CheckFactories.registerCheck<UncheckedMallocResultCheck>(
