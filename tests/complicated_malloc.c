@@ -72,8 +72,16 @@ void good_malloc() {
             }
         }
         ll = calloc(1,1); // test calloc
-        if(ll){ // use ()
+        if(ll == NULL){ // use ()
             return;
+        }
+
+        if (ll = malloc(4)){
+            // Do sth
+        }
+
+        if (!(ll = malloc(4))){
+            exit(-1);
         }
 
 
