@@ -4,6 +4,14 @@ A clang-tidy plugin that performs code quality checks for vg151.
 
 ---
 
+## Dependencies
+
+Make sure you have `llvm`, `clang-tidy` installed. You also need `libllvm-dev` (or some similar packages) to get the headers.
+
+You can install `llvm` on [apt.llvm.org](https://apt.llvm.org/) if you are using debian or ubuntu.
+
+If you are using other linux distribution that cannot install clang-tidy headers, you may download those headers manually from [github](https://github.com/llvm/llvm-project/releases/), download `clang-tools-extra-*.src.tar.xz` and move that to some header folder on your system.
+
 ## Build
 
 Based on your system environment, you may need to change the include directory in `CMakeLists.txt`:
