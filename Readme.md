@@ -30,6 +30,16 @@ cmake --build build --config Release
 
 You may change the compiler path (like adding `-DCMAKE_C_COMPILER:FILEPATH=/usr/bin/clang -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/clang++`). If possible, it is better to use `clang` and `clang++` instead of `gcc` and `g++`.
 
+## Run checks
+
+Use the sample code in the `tests` folder as an example,
+
+```bash
+clang-tidy --checks="-*,code*" --load=path_to_libcodequality.so -header-filter=".*" simple_static.cpp
+```
+
+`"-*,code*"` means add all `codequality` checks and ignore all other checks.
+
 ## All checks:
 
 ### `no-global-variables`
