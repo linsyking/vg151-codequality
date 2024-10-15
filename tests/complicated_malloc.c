@@ -106,6 +106,10 @@ void good_malloc() {
                 exit(-1);
             }
             break;
+        case 3:
+            int k = 1;
+            char *c = malloc(10);
+            break;
     }
     /*
     d2 = malloc(sizeof(test));
