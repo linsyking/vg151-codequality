@@ -66,6 +66,26 @@ bool UncheckedMallocResultCheck::hasUsedVar(const Stmt *statement, const VarDecl
     return false;
 }
 
+const Stmt *UncheckedMallocResultCheck::FindPaNodes(ASTContext *const context, DynTypedNodeList Parents){
+    const Stmt *Statement = nullptr;
+    while (true) {
+        if (Parents.empty()) {
+            reportBug();
+            return nullptr;
+        }
+        Statement = Parents[0].get<Stmt>();
+        if (!Statement) {
+            reportBug();
+            return nullptr;
+        }
+        if (!llvm::isa<clang::CaseStmt>(Statement)) {
+            break;
+        }
+        Parents = context->getParents(*Statement);
+    }
+    return Statement;
+}
+
 void UncheckedMallocResultCheck::check(const MatchFinder::MatchResult &Result) {
     const auto *DeclStatement = Result.Nodes.getNodeAs<DeclStmt>("decl");
     const auto *BinOperator   = Result.Nodes.getNodeAs<BinaryOperator>("bin");
@@ -81,33 +101,12 @@ void UncheckedMallocResultCheck::check(const MatchFinder::MatchResult &Result) {
 
     if (DeclStatement) {
         // Decl Mode
-        const auto &Parents = (Result.Context->getParents(*DeclStatement));
-        GenNode             = DeclStatement;
-        if (Parents.empty()) {
-            reportBug();
-            return;
-        }
-        const auto *Statement = Parents[0].get<Stmt>();
-        if (!Statement) {
-            reportBug();
-            return;
-        }
-        PaNodes = Statement;
-
+        GenNode = DeclStatement;
+        PaNodes = FindPaNodes(Result.Context, Result.Context->getParents(*DeclStatement));
     } else if (BinOperator) {
         // Bin mode
-        const auto &Parents = (Result.Context->getParents(*BinOperator));
-        GenNode             = BinOperator;
-        if (Parents.empty()) {
-            reportBug();
-            return;
-        }
-        const auto *Statement = Parents[0].get<Stmt>();
-        if (!Statement) {
-            reportBug();
-            return;
-        }
-        PaNodes = Statement;
+        GenNode = BinOperator;
+        PaNodes = FindPaNodes(Result.Context, Result.Context->getParents(*BinOperator));
     } else {
         reportBug();
         return;

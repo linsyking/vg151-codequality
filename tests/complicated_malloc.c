@@ -76,11 +76,11 @@ void good_malloc() {
             return;
         }
 
-        if (ll = malloc(4)){
+        if (ll = malloc(4)){ // FIXME: known false-positive
             // Do sth
         }
 
-        if (!(ll = malloc(4))){
+        if (!(ll = malloc(4))){ // FIXME: known false-positive
             exit(-1);
         }
 
@@ -91,6 +91,21 @@ void good_malloc() {
             free(d2->data);
             exit(-1);   // use other things
         }
+    }
+    switch (0){
+        case 1:
+            char* a = malloc(10);
+            if(!a){
+                exit(-1);
+            }
+            break;
+        case 2:
+            (void)0;
+            char* b = malloc(10);
+            if(!b){
+                exit(-1);
+            }
+            break;
     }
     /*
     d2 = malloc(sizeof(test));
