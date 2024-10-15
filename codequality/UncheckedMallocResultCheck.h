@@ -28,6 +28,7 @@ public:
 private:
     void reportBug();
     bool hasUsedVar(const clang::Stmt *stmt, const VarDecl *var);
+    const Stmt *FindPaNodes(ASTContext *const context, DynTypedNodeList Parents);
 };
 
 }  // namespace codequality
