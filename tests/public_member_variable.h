@@ -1,10 +1,10 @@
 #ifndef public_member_variable_h
 #define public_member_variable_h
 
-int j= 1;
+int j = 1;
 
-struct lp{
-    int k;
+struct lp {
+    int  k;
     char l;
 };
 

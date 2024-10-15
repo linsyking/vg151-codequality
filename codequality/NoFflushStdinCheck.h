@@ -24,8 +24,9 @@ public:
     NoFflushStdinCheck(StringRef Name, ClangTidyContext *Context) : ClangTidyCheck(Name, Context) {}
     void registerMatchers(ast_matchers::MatchFinder *Finder) override;
     void check(const ast_matchers::MatchFinder::MatchResult &Result) override;
+
 private:
-    const clang::Stmt * getStmt(clang::Stmt::const_child_range it, uint index);
+    const clang::Stmt *getStmt(clang::Stmt::const_child_range it, uint index);
 };
 
 }  // namespace codequality

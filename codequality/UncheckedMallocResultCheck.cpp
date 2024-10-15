@@ -66,7 +66,8 @@ bool UncheckedMallocResultCheck::hasUsedVar(const Stmt *statement, const VarDecl
     return false;
 }
 
-const Stmt *UncheckedMallocResultCheck::FindPaNodes(ASTContext *const context, DynTypedNodeList Parents){
+const Stmt *UncheckedMallocResultCheck::FindPaNodes(ASTContext *const context,
+                                                    DynTypedNodeList  Parents) {
     const Stmt *Statement = nullptr;
     while (true) {
         if (Parents.empty()) {
@@ -153,8 +154,7 @@ void UncheckedMallocResultCheck::check(const MatchFinder::MatchResult &Result) {
         }
     }
     if (ShouldCheck) {
-        diag(call_expr->getBeginLoc(),
-             "The value of dynamically allocated memory was not checked")
+        diag(call_expr->getBeginLoc(), "The value of dynamically allocated memory was not checked")
             << my_var << call_expr->getCallee()->getSourceRange();
     }
 }

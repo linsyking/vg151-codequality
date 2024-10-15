@@ -18,14 +18,12 @@ namespace codequality {
 
 void NoGlobalVariablesCheck::registerMatchers(MatchFinder *Finder) {
     Finder->addMatcher(
-        varDecl(hasGlobalStorage(),
-                unless(hasAncestor(functionDecl())),
-                unless(anyOf(isConstexpr(), hasType(isConstQualified()), hasType(referenceType()))),
-                unless(hasType(asString("struct option[0]"))),
-                unless(hasParent(declStmt(hasParent(compoundStmt(hasParent(cxxMethodDecl(hasParent(cxxRecordDecl(
-                    has(cxxConstructorDecl(isDefaultConstructor(), isPrivate()))
-                )))))))))
-                )
+        varDecl(
+            hasGlobalStorage(), unless(hasAncestor(functionDecl())),
+            unless(anyOf(isConstexpr(), hasType(isConstQualified()), hasType(referenceType()))),
+            unless(hasType(asString("struct option[0]"))),
+            unless(hasParent(declStmt(hasParent(compoundStmt(hasParent(cxxMethodDecl(hasParent(
+                cxxRecordDecl(has(cxxConstructorDecl(isDefaultConstructor(), isPrivate()))))))))))))
             .bind("global-variables"),
         this);
 }

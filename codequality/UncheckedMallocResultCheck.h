@@ -25,9 +25,10 @@ public:
         : ClangTidyCheck(Name, Context) {}
     void registerMatchers(ast_matchers::MatchFinder *Finder) override;
     void check(const ast_matchers::MatchFinder::MatchResult &Result) override;
+
 private:
-    void reportBug();
-    bool hasUsedVar(const clang::Stmt *stmt, const VarDecl *var);
+    void        reportBug();
+    bool        hasUsedVar(const clang::Stmt *stmt, const VarDecl *var);
     const Stmt *FindPaNodes(ASTContext *const context, DynTypedNodeList Parents);
 };
 
