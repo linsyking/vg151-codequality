@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(vg151-codequality)
 find_package(LLVM REQUIRED CONFIG)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
 set(CMAKE_CXX_FLAGS "-O3 -flto=auto")
 add_subdirectory(codequality)
