@@ -28,6 +28,21 @@ void bad_malloc() {
             return;
         }
     }
+    switch (0) {
+        case 1:
+            char *a = malloc(10);
+            if (a) {
+                exit(-1);
+            }
+            break;
+        case 2:
+            int k = 1;
+            char *c = malloc(10);
+            break;
+        case 3:
+            malloc(10);
+            break;
+    }
     /*
     d2 = malloc(sizeof(test));
     Comment test
@@ -105,10 +120,6 @@ void good_malloc() {
             if (!b) {
                 exit(-1);
             }
-            break;
-        case 3:
-            int k = 1;
-            char *c = malloc(10);
             break;
     }
     /*
