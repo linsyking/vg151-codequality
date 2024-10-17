@@ -14,12 +14,6 @@ If you are using other linux distribution that cannot install clang-tidy headers
 
 ## Build
 
-Based on your system environment, you may need to change the include directory in `CMakeLists.txt`:
-
-```cmake
-target_include_directories(codequality PRIVATE /usr/lib/llvm-17/include)
-```
-
 To build a Release version, run
 
 ```sh
