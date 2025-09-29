@@ -2,8 +2,8 @@ name: Cross-Platform Build
 
 on:
   push:
-    branches:
-      - dev
+    tags:
+      - 'v*'
 
 permissions:
   contents: write
