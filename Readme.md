@@ -24,13 +24,51 @@ cmake --build build --config Release
 
 You may change the compiler path (like adding `-DCMAKE_C_COMPILER:FILEPATH=/usr/bin/clang -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/clang++`). If possible, it is better to use `clang` and `clang++` instead of `gcc` and `g++`.
 
+## macOS Build Instructions
+
+For macOS, you need to ensure LLVM and Clang are properly installed and specify the correct CMake paths:
+
+1. Install LLVM/Clang via Homebrew:
+
+```bash
+brew install llvm
+```
+
+2. Build with the correct CMake configuration:
+
+```bash
+cmake -DCMAKE_BUILD_TYPE:STRING=Release \
+      -DLLVM_DIR="$(brew --prefix llvm)/lib/cmake/llvm" \
+      -DClang_DIR="$(brew --prefix llvm)/lib/cmake/clang" \
+      -S . -B build
+
+cmake --build build --config Release
+```
+
+The build process will generate `libcodequality.dylib` instead of `libcodequality.so` on macOS.
+
 ## Run checks
 
 Use the sample code in the `tests` folder as an example,
 
 ```bash
+# Linux
 clang-tidy --checks="-*,code*" --load=path_to_libcodequality.so -header-filter=".*" simple_static.cpp
 ```
+
+```bash
+# Macos
+clang-tidy \
+  --load=../vg151-codequality/build/codequality/path_to_libcodequality.dylib \
+  --checks="-*,code*" \
+  -header-filter=".*" \
+  -extra-arg=-isystem \
+  -extra-arg=$(xcrun --show-sdk-path)/usr/include \
+  *.[ch]
+;
+```
+
+For macOS, the library path would be `path_to_libcodequality.dylib`.
 
 `"-*,code*"` means add all `codequality` checks and ignore all other checks.
 
@@ -59,4 +97,3 @@ Stop you from using public member variables. Protected member variables and publ
 ### `no-header-guard`
 
 Check if you defined header guard in header files.
-

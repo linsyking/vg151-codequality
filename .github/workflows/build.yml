@@ -1,0 +1,104 @@
+name: Cross-Platform Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install LLVM via Homebrew
+        run: brew install llvm cmake
+      - name: Build
+        run: ./build-cross-platform.sh -c -t Release
+      - name: Rename lib
+        run: mv build/codequality/libcodequality.dylib build/codequality/libcodequality-macos.dylib
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-lib
+          path: build/codequality/libcodequality-macos.dylib
+
+  deb:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential
+          sudo apt-get install -y clang-18 libclang-18-dev llvm-18 llvm-18-dev llvm-18-tools \
+              libzstd-dev zlib1g-dev libedit-dev libcurl4-openssl-dev libxml2-dev
+      - name: Build
+        run: ./build-cross-platform.sh -c -t Release
+      - name: Rename lib
+        run: mv build/codequality/libcodequality.so build/codequality/libcodequality-18.so
+      - uses: actions/upload-artifact@v4
+        with:
+          name: deb-lib
+          path: build/codequality/libcodequality-18.so
+
+  redhat:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+      options: --user root
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          dnf -y update
+          dnf -y install cmake make gcc-c++ clang clang-devel llvm llvm-devel zlib-devel \
+              libedit-devel libxml2-devel zstd libcurl-devel clang-tools-extra clang-tools-extra-devel
+      - name: Build
+        run: ./build-cross-platform.sh -c -t Release
+      - name: Rename lib
+        run: mv build/codequality/libcodequality.so build/codequality/libcodequality-20.so
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rpm-lib
+          path: build/codequality/libcodequality-20.so
+
+  release:
+    name: Create Release
+    needs: [macos, redhat, deb]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List artifacts
+        run: ls -R artifacts
+
+      - name: Create checksums
+        run: |
+          cd artifacts
+          find . -type f ! -name "*.sha256" -exec sh -c '
+            for f; do
+              openssl dgst -sha256 "$f" > "$f.sha256"
+            done
+          ' sh {} +
+
+      - name: Get tag name
+        id: tag
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Upload binaries to release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag.outputs.TAG_NAME }}
+          name: ${{ steps.tag.outputs.TAG_NAME }}
+          draft: false
+          prerelease: false
+          files: |
+            artifacts/**/*
