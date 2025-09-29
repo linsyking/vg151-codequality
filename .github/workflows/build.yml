@@ -31,6 +31,9 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
+          sudo apt-get remove -y 'llvm-*' 'clang-*' lldb-* lld-* libc++* libc++abi* || true
+          sudo apt-get autoremove -y
+          sudo apt-get clean
           sudo apt-get install -y cmake build-essential wget gnupg lsb-release software-properties-common
           wget https://apt.llvm.org/llvm.sh
           chmod +x llvm.sh
