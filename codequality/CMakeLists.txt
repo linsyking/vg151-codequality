@@ -63,19 +63,3 @@ endforeach()
 if(REQUIRED_LIBS)
     target_link_libraries(codequality ${REQUIRED_LIBS})
 endif()
-
-# Always link against required LLVM components
-set(LLVM_COMPONENTS
-    Support
-    Core
-)
-
-# Map LLVM components to libraries and link them
-llvm_map_components_to_libnames(LLVM_LIBRARIES ${LLVM_COMPONENTS})
-if(LLVM_LIBRARIES)
-    target_link_libraries(codequality ${LLVM_LIBRARIES})
-endif()
-
-if(LLVM_LDFLAGS)
-    target_link_libraries(codequality ${LLVM_LDFLAGS})
-endif()
