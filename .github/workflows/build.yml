@@ -24,49 +24,29 @@ jobs:
           name: macos-lib
           path: build/codequality/libcodequality-macos.dylib
 
-  deb:
+  linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake build-essential
-          sudo apt-get install -y clang-18 libclang-18-dev llvm-18 llvm-18-dev llvm-18-tools \
-              libzstd-dev zlib1g-dev libedit-dev libcurl4-openssl-dev libxml2-dev
-      - name: Build
-        run: ./build-cross-platform.sh -c -t Release
-      - name: Rename lib
-        run: mv build/codequality/libcodequality.so build/codequality/libcodequality-18.so
-      - uses: actions/upload-artifact@v4
-        with:
-          name: deb-lib
-          path: build/codequality/libcodequality-18.so
-
-  redhat:
-    runs-on: ubuntu-latest
-    container:
-      image: fedora:latest
-      options: --user root
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies
-        run: |
-          dnf -y update
-          dnf -y install cmake make gcc-c++ clang clang-devel llvm llvm-devel zlib-devel \
-              libedit-devel libxml2-devel zstd libcurl-devel clang-tools-extra clang-tools-extra-devel
+          sudo apt-get install -y cmake build-essential wget gnupg lsb-release software-properties-common
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 20 all
       - name: Build
         run: ./build-cross-platform.sh -c -t Release
       - name: Rename lib
         run: mv build/codequality/libcodequality.so build/codequality/libcodequality-20.so
       - uses: actions/upload-artifact@v4
         with:
-          name: rpm-lib
+          name: linux-lib
           path: build/codequality/libcodequality-20.so
 
   release:
     name: Create Release
-    needs: [macos, redhat, deb]
+    needs: [macos, linux]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
